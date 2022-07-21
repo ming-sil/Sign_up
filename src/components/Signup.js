@@ -6,6 +6,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -77,6 +78,8 @@ const GotoSignup = styled.span`
   }
 `;
 
+const Text = styled.h3``;
+
 const ErrorMessage = styled.span`
   font-size: 10px;
   font-weight: 900;
@@ -86,6 +89,7 @@ const ErrorMessage = styled.span`
 
 export const Signup = () => {
   const navigate = useNavigate();
+  const [popup, setPopup] = useState("none");
 
   const {
     register,
@@ -107,9 +111,9 @@ export const Signup = () => {
     } else {
       clearErrors("result");
     }
-    // console.log(emailID !== dbEmailID || password !== dbPassword);
+
     if (isValid === true) {
-      navigate("/login");
+      setPopup("block");
     }
   };
 
@@ -123,7 +127,6 @@ export const Signup = () => {
           <input
             {...register("emailID", {
               required: "아이디를 입력해 주세요",
-
               pattern: {
                 value: /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                 message:
@@ -155,18 +158,18 @@ export const Signup = () => {
           <FontAwesomeIcon icon={faLock} />
           <input
             {...register("confirmpassword", {
-              required: "비밀번호를 입력해 주세요",
+              required: "비밀번호를 확인이 필요합니다.",
               onChange() {},
             })}
             type="password"
-            placeholder="Password"
+            placeholder="Confirm Password"
           />
         </Input>
         <Input>
           <span>NAME</span>
           <FontAwesomeIcon icon={faUser} />
           <input
-            {...register("name", { required: "이름을 입력해 주세요" })}
+            {...register("name", { required: "이름을 입력해 주세요." })}
             type="text"
             placeholder="Name"
           />
@@ -175,7 +178,7 @@ export const Signup = () => {
           <span>BIRTH DATE</span>
           <FontAwesomeIcon icon={faCakeCandles} />
           <input
-            {...register("birth", { required: "생일을 선택해 주세요" })}
+            {...register("birth", { required: "생일을 선택해 주세요." })}
             type="date"
             placeholder="YY-MM-DD"
           />
@@ -199,6 +202,22 @@ export const Signup = () => {
           <Link to="/login">로그인</Link>
           하러가기
         </GotoSignup>
+      </Form>
+      <Form>
+        <Text>
+          축하합니다!
+          <br />
+          회원가입이 완료되었습니다!
+        </Text>
+        <Link to="/login">
+          <Btn
+            opacity={isValid ? 1 : 0.5}
+            cursor={isValid ? "pointer" : "auto"}
+          >
+            로그인 하러가기
+            <Arrow ani={isValid ? "arrow_ani" : "none"}>▸</Arrow>
+          </Btn>
+        </Link>
       </Form>
     </Wrap>
   );
