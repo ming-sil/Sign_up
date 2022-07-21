@@ -1,7 +1,7 @@
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Form } from "../style/Form";
 import { ProfileImg } from "../style/ProfileImg";
@@ -56,6 +56,17 @@ const Btn = styled.button`
         transform: translateX(5px);
       }
     }
+  }
+`;
+
+const GotoSignup = styled.span`
+  margin-top: 15px;
+  text-align: center;
+  font-size: 8px;
+  font-weight: 100;
+  a {
+    font-size: 12px;
+    font-weight: 400;
   }
 `;
 
@@ -142,6 +153,12 @@ export const Login = () => {
         <Btn opacity={isValid ? 1 : 0.5} cursor={isValid ? "pointer" : "auto"}>
           LOGIN <span ani={isValid ? "arrow_ani" : "none"}>▸</span>
         </Btn>
+        <GotoSignup>
+          아이디가 없으신가요?
+          <br />
+          <Link to="/signup">회원가입</Link>
+          하러가기
+        </GotoSignup>
       </Form>
     </Wrap>
   );
