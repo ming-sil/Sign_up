@@ -6,11 +6,7 @@ import styled from "styled-components";
 import { Form } from "../style/Form";
 import { ProfileImg } from "../style/ProfileImg";
 import { Wrap } from "../style/Wrap";
-
-const userDb = {
-  dbEmailID: "asdf@asdf",
-  dbPassword: "qwer1234",
-};
+import { userDb } from "./userDB.js/user";
 
 const Input = styled.div`
   svg {
@@ -42,19 +38,20 @@ const Btn = styled.button`
   align-items: center;
   opacity: ${(props) => props.opacity};
   cursor: ${(props) => props.cursor};
-  span {
-    animation-name: ${(props) => props.ani};
-    animation-duration: 0.3s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    @keyframes arrow_ani {
-      from {
-        transform: translateX(0);
-      }
+`;
 
-      to {
-        transform: translateX(5px);
-      }
+const Arrow = styled.span`
+  animation-name: ${(props) => props.ani};
+  animation-duration: 0.3s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  @keyframes arrow_ani {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(5px);
     }
   }
 `;
@@ -100,7 +97,7 @@ export const Login = () => {
     } else {
       clearErrors("result");
     }
-    console.log(emailID !== dbEmailID || password !== dbPassword);
+    // console.log(emailID !== dbEmailID || password !== dbPassword);
     if (emailID === dbEmailID && password === dbPassword) {
       navigate("/");
     }
@@ -113,15 +110,16 @@ export const Login = () => {
         <Input>
           <FontAwesomeIcon icon={faEnvelope} />
           <input
-            {...register("EmailID", {
+            {...register("emailID", {
               required: "아이디를 입력해 주세요",
-              minLength: {
-                value: 5,
+
+              pattern: {
+                value: /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                 message:
-                  "ID는 다섯자 이상의 이메일 형식으로 작성되어야 합니다.",
+                  "ID는 계정@도메인.최상위도메인의 이메일 형식으로 작성되어야 합니다.",
               },
             })}
-            type="email"
+            type="text"
             placeholder="Email ID"
           />
         </Input>
@@ -151,7 +149,7 @@ export const Login = () => {
           <ErrorMessage>{errors?.result?.message}</ErrorMessage>
         )}
         <Btn opacity={isValid ? 1 : 0.5} cursor={isValid ? "pointer" : "auto"}>
-          LOGIN <span ani={isValid ? "arrow_ani" : "none"}>▸</span>
+          LOGIN <Arrow ani={isValid ? "arrow_ani" : "none"}>▸</Arrow>
         </Btn>
         <GotoSignup>
           아이디가 없으신가요?
