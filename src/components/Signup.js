@@ -1,38 +1,9 @@
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-
-const Wrap = styled.div`
-  width: 100%;
-  height: 100vh;
-  background: url("https://sapiensnetwork.eu/wp-content/uploads/2021/01/gradient-background-02.jpg")
-    no-repeat center / cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const LoginWrap = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 400px;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-  border-radius: 25px;
-  padding: 30px;
-`;
-
-const ProfileImg = styled.div`
-  width: 70px;
-  height: 70px;
-  border: 1px solid white;
-  border-radius: 50%;
-  background: url("https://iwillbeyourphotoguide.com/wp-content/uploads/2018/11/camera-icon-white-300x300.png")
-    no-repeat center / 80%;
-  margin-bottom: 40px;
-`;
+import { Form } from "../style/Form";
+import { ProfileImg } from "../style/ProfileImg";
+import { Wrap } from "../style/Wrap";
 
 const Input = styled.div`
   width: 80%;
@@ -65,7 +36,7 @@ const Btn = styled.button`
 export const Signup = () => {
   return (
     <Wrap>
-      <LoginWrap>
+      <Form>
         <ProfileImg />
         <Input>
           <FontAwesomeIcon icon={faEnvelope} />
@@ -93,7 +64,7 @@ export const Signup = () => {
           <input type="date" name="Birth" placeholder="Birth" />
         </Input>
         <Btn>SIGNUP ▸</Btn>
-      </LoginWrap>
+      </Form>
     </Wrap>
   );
 };
