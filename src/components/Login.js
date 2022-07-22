@@ -120,7 +120,7 @@ export const Login = () => {
               },
             })}
             type="text"
-            placeholder="Email ID"
+            placeholder="name@domain.com"
           />
         </Input>
         <Input>

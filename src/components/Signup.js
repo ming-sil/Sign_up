@@ -1,5 +1,4 @@
 import {
-  faCake,
   faCakeCandles,
   faEnvelope,
   faLock,
@@ -13,18 +12,22 @@ import styled from "styled-components";
 import { Form } from "../style/Form";
 import { ProfileImg } from "../style/ProfileImg";
 import { Wrap } from "../style/Wrap";
-
-const userDb = {
-  dbEmailID: "asdf@asdf",
-  dbPassword: "qwer1234",
-};
+import { userDb } from "./userDB.js/user";
 
 const Input = styled.div`
+  display: flex;
+  font-size: 12px;
+  div {
+    width: 70px;
+    display: inline;
+    text-align: end;
+  }
   svg {
     transform: translateX(20px);
   }
   input {
     all: unset;
+    width: 130px;
     font-size: 8px;
     border-bottom: 1px solid white;
     padding: 5px 30px;
@@ -32,8 +35,26 @@ const Input = styled.div`
     background: transparent;
     &::placeholder {
       color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-4px);
     }
   }
+`;
+
+const BtnId = styled.div`
+  all: unset;
+  font-size: 10px;
+  padding: 5px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 120px;
+  right: 30px;
+  cursor: pointer;
+  /* opacity: ${(props) => props.opacity};
+  cursor: ${(props) => props.cursor}; */
 `;
 
 const Btn = styled.button`
@@ -67,7 +88,7 @@ const Arrow = styled.span`
   }
 `;
 
-const GotoSignup = styled.span`
+const GotoSignup1 = styled.span`
   margin-top: 15px;
   text-align: center;
   font-size: 8px;
@@ -78,7 +99,20 @@ const GotoSignup = styled.span`
   }
 `;
 
-const Text = styled.h3``;
+const GotoSignup2 = styled.span`
+  text-align: center;
+  position: absolute;
+  display: ${(props) => props.apear};
+  button {
+    width: 100px;
+  }
+  p {
+    margin-bottom: 20px;
+  }
+  a {
+    text-decoration: none;
+  }
+`;
 
 const ErrorMessage = styled.span`
   font-size: 10px;
@@ -88,9 +122,6 @@ const ErrorMessage = styled.span`
 `;
 
 export const Signup = () => {
-  const navigate = useNavigate();
-  const [popup, setPopup] = useState("none");
-
   const {
     register,
     handleSubmit,
@@ -101,17 +132,22 @@ export const Signup = () => {
   } = useForm({
     mode: "onChange",
   });
+  const [popup, setPopup] = useState("none");
+  const [a, setA] = useState(false);
+
+  const handleIdCon = () => {
+    // console.log(getValues().emailID);
+    // console.log(userDb.dbEmailID);
+    const { emailID } = getValues();
+    if (emailID === userDb.dbEmailID) {
+      setError("idResult", { message: "이미 존재하는 아이디 입니다." });
+    } else {
+      setA(true);
+      clearErrors("idResult");
+    }
+  };
 
   const onSubmit = () => {
-    const { emailID, password } = getValues();
-    const { dbEmailID, dbPassword } = userDb;
-
-    if (emailID !== dbEmailID || password !== dbPassword) {
-      setError("result", { message: "아이디 혹은 비밀번호가 틀렸습니다." });
-    } else {
-      clearErrors("result");
-    }
-
     if (isValid === true) {
       setPopup("block");
     }
@@ -122,7 +158,7 @@ export const Signup = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <ProfileImg />
         <Input>
-          <span>ID</span>
+          <div>ID</div>
           <FontAwesomeIcon icon={faEnvelope} />
           <input
             {...register("emailID", {
@@ -130,15 +166,33 @@ export const Signup = () => {
               pattern: {
                 value: /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                 message:
-                  "ID는 계정@도메인.최상위도메인의 이메일 형식으로 작성되어야 합니다.",
+                  "ID는 '계정@도메인.최상위도메인'의 이메일 형식으로 작성되어야 합니다.",
+              },
+              onChange() {
+                setA(false);
               },
             })}
             type="text"
-            placeholder="Email ID"
+            placeholder="name@domain.com"
           />
         </Input>
+        {a ? (
+          <ErrorMessage
+            style={{
+              color: "blue",
+              transform: "translate(10px,-25px)",
+              marginBottom: "0",
+            }}
+          >
+            사용가능한 아이디 입니다.
+          </ErrorMessage>
+        ) : (
+          ""
+        )}
+        <BtnId onClick={handleIdCon}>ID 중복확인</BtnId>
+
         <Input>
-          <span>PASSWORD</span>
+          <div>PASSWORD</div>
           <FontAwesomeIcon icon={faLock} />
           <input
             {...register("password", {
@@ -150,75 +204,111 @@ export const Signup = () => {
               },
             })}
             type="password"
-            placeholder="Password"
+            placeholder="at least 8 characters"
           />
         </Input>
         <Input>
-          <span>CONFIRM PASSWORD</span>
+          <div>
+            CONFIRM
+            <br />
+            PASSWORD
+          </div>
           <FontAwesomeIcon icon={faLock} />
           <input
             {...register("confirmpassword", {
               required: "비밀번호를 확인이 필요합니다.",
-              onChange() {},
+              onChange() {
+                const { password, confirmpassword } = getValues();
+                if (password !== confirmpassword) {
+                  setError("pwResult", {
+                    message: "비밀번호가 일치하지 않습니다.",
+                  });
+                } else {
+                  clearErrors("pwResult");
+                }
+              },
             })}
             type="password"
             placeholder="Confirm Password"
           />
         </Input>
         <Input>
-          <span>NAME</span>
+          <div>NAME</div>
           <FontAwesomeIcon icon={faUser} />
           <input
             {...register("name", { required: "이름을 입력해 주세요." })}
             type="text"
-            placeholder="Name"
+            placeholder="Your Name"
           />
         </Input>
         <Input>
-          <span>BIRTH DATE</span>
+          <div>BIRTH</div>
           <FontAwesomeIcon icon={faCakeCandles} />
           <input
-            {...register("birth", { required: "생일을 선택해 주세요." })}
-            type="date"
+            {...register("birth", {
+              required: "생일을 입력해 주세요.",
+              pattern: {
+                value: /^\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
+                message: "올바른 생년월일을 입력해 주세요.",
+              },
+            })}
+            type="text"
             placeholder="YY-MM-DD"
           />
         </Input>
-        {errors?.EmailID?.message && (
-          <ErrorMessage>{errors?.EmailID?.message}</ErrorMessage>
+        {errors?.emailID?.message && (
+          <ErrorMessage>{errors?.emailID?.message}</ErrorMessage>
         )}
-
         {errors?.password?.message && (
           <ErrorMessage>{errors?.password?.message}</ErrorMessage>
         )}
-        {errors?.result?.message && (
-          <ErrorMessage>{errors?.result?.message}</ErrorMessage>
+        {errors?.confirmpassword?.message && (
+          <ErrorMessage>{errors?.confirmpassword?.message}</ErrorMessage>
+        )}
+        {errors?.name?.message && (
+          <ErrorMessage>{errors?.name?.message}</ErrorMessage>
+        )}
+        {errors?.birth?.message && (
+          <ErrorMessage>{errors?.birth?.message}</ErrorMessage>
+        )}
+        {errors?.idResult?.message && (
+          <ErrorMessage>{errors?.idResult?.message}</ErrorMessage>
+        )}
+        {errors?.pwResult?.message && (
+          <ErrorMessage>{errors?.pwResult?.message}</ErrorMessage>
         )}
         <Btn opacity={isValid ? 1 : 0.5} cursor={isValid ? "pointer" : "auto"}>
-          SIGN UP <Arrow ani={isValid ? "arrow_ani" : "none"}>▸</Arrow>
+          SIGN UP
+          <Arrow ani={isValid ? "arrow_ani" : "none"} popup={onSubmit}>
+            ▸
+          </Arrow>
         </Btn>
-        <GotoSignup>
+        <GotoSignup1>
           이미 아이디가 있으신가요?
           <br />
           <Link to="/login">로그인</Link>
           하러가기
-        </GotoSignup>
+        </GotoSignup1>
       </Form>
-      <Form>
-        <Text>
-          축하합니다!
-          <br />
-          회원가입이 완료되었습니다!
-        </Text>
-        <Link to="/login">
-          <Btn
-            opacity={isValid ? 1 : 0.5}
-            cursor={isValid ? "pointer" : "auto"}
-          >
-            로그인 하러가기
-            <Arrow ani={isValid ? "arrow_ani" : "none"}>▸</Arrow>
-          </Btn>
-        </Link>
-      </Form>
+
+      <GotoSignup2 apear={popup}>
+        <Form>
+          <p>
+            🎉축하합니다!🎉
+            <br />
+            회원가입이 완료되었습니다!
+          </p>
+          <Link to="/login">
+            <Btn
+              opacity={isValid ? 1 : 0.3}
+              cursor={isValid ? "pointer" : "auto"}
+            >
+              로그인하러가기
+              <Arrow ani={isValid ? "arrow_ani" : "none"}>▸</Arrow>
+            </Btn>
+          </Link>
+        </Form>
+      </GotoSignup2>
     </Wrap>
   );
 };
