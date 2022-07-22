@@ -139,11 +139,17 @@ export const Signup = () => {
     // console.log(getValues().emailID);
     // console.log(userDb.dbEmailID);
     const { emailID } = getValues();
-    if (emailID === userDb.dbEmailID) {
-      setError("idResult", { message: "이미 존재하는 아이디 입니다." });
+    if (emailID.length === 0) {
+      setError("idResult", { message: "값을 입력해주세요" });
     } else {
-      setA(true);
-      clearErrors("idResult");
+      if (errors?.emailID?.message.length === 0) {
+        if (emailID === userDb.dbEmailID) {
+          setError("idResult", { message: "이미 존재하는 아이디 입니다." });
+        } else {
+          setA(true);
+          clearErrors("idResult");
+        }
+      }
     }
   };
 
@@ -170,6 +176,7 @@ export const Signup = () => {
               },
               onChange() {
                 setA(false);
+                clearErrors("idResult");
               },
             })}
             type="text"
@@ -236,7 +243,13 @@ export const Signup = () => {
           <div>NAME</div>
           <FontAwesomeIcon icon={faUser} />
           <input
-            {...register("name", { required: "이름을 입력해 주세요." })}
+            {...register("name", {
+              required: "이름을 입력해 주세요.",
+              pattern: {
+                value: 3,
+                message: "이름은 3글자 이상 작성되어야 합니다.",
+              },
+            })}
             type="text"
             placeholder="Your Name"
           />
