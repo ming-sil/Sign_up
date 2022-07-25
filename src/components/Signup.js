@@ -140,7 +140,6 @@ export const Signup = () => {
     // console.log(userDb.dbEmailID);
     const { emailID } = getValues();
     if (emailID.length === 0) {
-<<<<<<< HEAD
       setError("idResult", {
         message: "중복확인을위해 아이디를 입력해주세요.",
       });
@@ -151,16 +150,6 @@ export const Signup = () => {
         } else {
           setA(true);
           clearErrors("idResultSame");
-=======
-      setError("idResult", { message: "값을 입력해주세요" });
-    } else {
-      if (errors?.emailID?.message.length === 0) {
-        if (emailID === userDb.dbEmailID) {
-          setError("idResult", { message: "이미 존재하는 아이디 입니다." });
-        } else {
-          setA(true);
-          clearErrors("idResult");
->>>>>>> b09dc1ca8ce8d24d8f41094f19e86ec9b3f0fd5d
         }
       }
     }
