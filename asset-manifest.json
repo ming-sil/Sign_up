@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/login_signup/static/js/main.df877291.js",
+    "index.html": "/login_signup/index.html",
+    "main.df877291.js.map": "/login_signup/static/js/main.df877291.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.df877291.js"
+  ]
+}
